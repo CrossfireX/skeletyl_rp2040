@@ -1,6 +1,6 @@
 # Skeletyl with QMK on rp2040 
 
-Rp2040 boards use PIO serial communication and are connected over 3.5" audio jack. 
+Rp2040 boards use PIO serial communication and are connected over 3.5" audio jack.<br>
 It uses 3 pins: 3V3 (36), GND (38) and TX (GP0).
 
 Recipe to get it done:
