@@ -3,7 +3,8 @@
 
 enum layer_names{
   _QWERTY,
-  _NUMBERS,
+  _RAISE,
+  _LOWER,
   _FUNC
 };
 
@@ -32,11 +33,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  /* Layer 1: Symbols
  * ,-----.-----.-----.-----.-----.                      ,-----.-----.-----.-----.-----.
- * | 1!  | 2@  | 3#  | 4$  | 5%  |                      | 6^  | 7&  | 8*  | 9(  | 0)  |
+ * |  1  |  2  |  3  |  4  |  5  |                      |  6  |  7  |  8  |  9  |  0  |
  * |-----+-----+-----+-----+-----|                      |-----+-----+-----+-----+-----|
- * | `~  |HOME |PGUP |PGDN | END |                      |LEFT |DOWN | UP  |RGHT | ' " |
+ * |     |HOME |PGUP |PGDN | END |                      |LEFT |DOWN | UP  |RGHT | ' " |
  * |-----+-----+-----+-----+-----+                      |-----+-----+-----+-----+-----|
- * |SHFT |     |     |     |     |                      | -_  | =+  | [{  | ]}  |SHF\||
+ * |SHFT |     |     |     |     |                      |     |     |     |     |     |
  * `-----'-----'-----'-----'-----'                      `-----'-----'-----'-----'-----'
  *               .-------.-------.-------.      .-------.-------.-------.   
  *               |       |       |       |      |       |(hold) |       |
@@ -45,12 +46,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT_split_3x5_3(
     KC_1, KC_2, KC_3, KC_4, KC_5,                          KC_6, KC_7, KC_8, KC_9, KC_0, 
-    KC_GRV, KC_HOME, KC_PGUP, KC_PGDN, KC_END,             KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_QUOT, 
-    KC_LSFT, KC_DEL, KC_NO, KC_NO, KC_NO,                  KC_MINS, KC_EQL, KC_LBRC, KC_RBRC, RSFT_T(KC_BSLS), 
-                      KC_NO, KC_NO, KC_NO,          KC_NO, KC_TRNS, KC_NO
+    KC_NO, KC_HOME, KC_PGUP, KC_PGDN, KC_END,             KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_NO, 
+    KC_NO, KC_DEL, KC_NO, KC_NO, KC_NO,                  KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
+                      KC_NO, KC_NO, KC_NO,          KC_NO, KC_TRNS, MO(3)
   ),
 
   /* Layer 2: Function keys
+* ,-----.-----.-----.-----.-----.                      ,-----.-----.-----.-----.-----.
+* |  ! |   @  |  #  |  $  |  %  |                      |  ^  |  &  |  *  |  (  |  )  |
+* |-----+-----+-----+-----+-----|                      |-----+-----+-----+-----+-----|
+* |  `  | '   |     |     |     |                      |  -  |  =  |  [  |  ]  |  /  |
+* |-----+-----+-----+-----+-----+                      |-----+-----+-----+-----+-----|
+* |   ~  | "  |     |     |     |                      |  _  |  +  |  {  |  }  |  |  |    
+* `-----'-----'-----'-----'-----'                      `-----'-----'-----'-----'-----'
+*               .-------.-------.-------.      .-------.-------.-------.   
+*               |       |       |       |      |       |       |(hold) |
+*               '-----------------------'      '-------'-------'-------' 
+*/
+
+  [2] = LAYOUT_split_3x5_3(
+    KC_EXLM, KC_AT, KC_HASH,  KC_DLR, KC_PERC,            KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
+    KC_GRV, KC_QUOT, KC_NO, KC_NO, KC_NO,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,
+    KC_TILD, KC_DQUO, KC_NO,KC_NO, KC_NO,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
+                             KC_NO, KC_NO, KC_NO,         KC_NO, MO(3), KC_NO
+
+),
+  /* Layer 3: Function keys
 * ,-----.-----.-----.-----.-----.                      ,-----.-----.-----.-----.-----.
 * | F1  | F2  | F3  | F4  | F5  |                      | F6  | F7  | F8  | F9  | F10 |
 * |-----+-----+-----+-----+-----|                      |-----+-----+-----+-----+-----|
@@ -59,15 +80,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 * |     |     |     |     |     |                      |     |     |     |     |     |
 * `-----'-----'-----'-----'-----'                      `-----'-----'-----'-----'-----'
 *               .-------.-------.-------.      .-------.-------.-------.   
-*               |       |       |       |      |       |       |(hold) |
+*               |       |       |       |      |       |(hold) or(hold)|
 *               '-----------------------'      '-------'-------'-------' 
 */
-
-  [2] = LAYOUT_split_3x5_3(
+  [3] = LAYOUT_split_3x5_3(
     KC_F1, KC_F2, KC_F3, KC_F4, KC_F5,                            KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, 
     KC_F11, KC_F12, KC_MPRV, KC_MPLY, KC_MNXT,                    KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, 
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
-                            KC_NO, KC_NO, KC_NO,           KC_NO, KC_NO, KC_TRNS
+                            KC_NO, KC_NO, KC_NO,           KC_NO, KC_NO, KC_NO
   )
 };
 
@@ -80,7 +100,6 @@ static uint16_t press_count = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-     // キーが押されたら、カウンターをインクリメントする
     if (record->event.pressed) {
         press_count++;
     }
@@ -154,8 +173,11 @@ bool oled_task_user() {
         case _QWERTY:
             oled_write_P(PSTR("QWERTY\n"), false);
             break;
-        case _NUMBERS:
-            oled_write_P(PSTR("NUMBER\n"), false);
+        case _RAISE:
+            oled_write_P(PSTR("RAISE\n"), false);
+            break;
+        case _LOWER:
+            oled_write_P(PSTR("LOWER\n"), false);
             break;
         case _FUNC: 
             oled_write_P(PSTR("FUNCTION\n"), false);
